@@ -1,0 +1,27 @@
+fastapi>=0.115
+uvicorn[standard]>=0.30
+pydantic>=2.9
+pydantic-settings>=2.5
+sqlalchemy>=2.0
+aiosqlite>=0.20
+httpx>=0.27
+openai>=1.40
+python-multipart>=0.0.9
+cryptography>=43.0
+PyJWT>=2.9
+python-dotenv>=1.0
+
+# --- OCR + RAG (handles/deep_analyzed.py, /ocr/*) ---
+# PDF text extractors, tried in priority order (all soft-imported, app runs without them):
+pymupdf>=1.24        # primary: text extraction + page-to-PNG rendering for Vision fallback
+pdfplumber>=0.11      # fallback extractor
+pypdf>=4.0            # fallback extractor
+pdfminer.six>=20231228  # fallback extractor
+nltk>=3.9             # sentence tokenization for chunking (falls back to regex if punkt data missing)
+# RAG hybrid search (falls back to BM25-lite if not installed):
+lancedb>=0.13
+sentence-transformers>=3.0
+
+# Optional, only needed if you switch DATABASE_URL to Postgres:
+# asyncpg>=0.29
+# psycopg2-binary>=2.9

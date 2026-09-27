@@ -1,0 +1,29 @@
+# Env files with secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# SQLite local dev db
+*.db
+*.sqlite3
+
+# Node (in case a frontend is added later)
+node_modules/
+
+# Editors/OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
