@@ -3,13 +3,12 @@ import {
   CalendarDots,
   ChatsCircle,
   ChartBar,
-  ArrowUpRight,
   Heart,
   Translate as TranslateIcon,
   ShieldCheck,
 } from "@phosphor-icons/react";
 import type { Language, Tab, Translate } from "../types";
-import { Brand } from "./Shared";
+import { Brand, PharmacyLink } from "./Shared";
 export function Shell({
   tab,
   setTab,
@@ -61,7 +60,13 @@ export function Shell({
         {t("Aller au contenu", "سير للمحتوى")}
       </a>
       <aside className="sidebar">
-        <Brand />
+        <a
+          className="home-brand-link"
+          href="/"
+          aria-label={t("DarijaDoc, accueil", "داريجة دوك، الرئيسية")}
+        >
+          <Brand />
+        </a>
         <div className="nav-label">
           {t("Votre espace santé", "الفضاء الصحي ديالك")}
         </div>
@@ -97,15 +102,7 @@ export function Shell({
               )}
             </p>
           </div>
-          <a
-            href="https://www.google.com/maps/search/pharmacie/"
-            target="_blank"
-            rel="noreferrer"
-            className="sidebar-pharmacy"
-          >
-            {t("Une pharmacie près de moi", "صيدلية قريبة ليا")}
-            <ArrowUpRight size={16} />
-          </a>
+          <PharmacyLink t={t} variant="sidebar" />
           <div className="made-in">
             {t("Pensé pour le Maroc", "مصاوب للمغرب")}
             <span className="morocco-mark">✳</span>

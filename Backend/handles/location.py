@@ -7,7 +7,11 @@ from pydantic import BaseModel
 
 router = APIRouter()
 
-OVERPASS_URL = "https://overpass-api.de/api/interpreter"
+OVERPASS_URLS = [
+    "https://lz4.overpass-api.de/api/interpreter",
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+]
 
 FacilityType = Literal["pharmacy", "hospital", "clinic", "doctors"]
 
@@ -57,7 +61,7 @@ async def nearby_facilities(
 ) -> NearbyFacilitiesResponse:
     radius_m = int(radius_km * 1000)
     query = f"""
-    [out:json][timeout:25];
+    [out:json][timeout:15];
     (
       node["amenity"="{facility_type}"](around:{radius_m},{lat},{lon});
       way["amenity"="{facility_type}"](around:{radius_m},{lat},{lon});
@@ -65,20 +69,30 @@ async def nearby_facilities(
     out center {limit};
     """
 
+    elements = None
+    last_error = "no location provider responded"
     try:
-        async with httpx.AsyncClient(timeout=30) as client:
-            response = await client.post(
-                OVERPASS_URL,
-                data={"data": query},
-                headers={"User-Agent": "DarijaDoc/0.1 (hackathon medical navigator)"},
-            )
+        async with httpx.AsyncClient(timeout=18) as client:
+            for url in OVERPASS_URLS:
+                try:
+                    response = await client.post(
+                        url,
+                        data={"data": query},
+                        headers={"User-Agent": "DarijaDoc/0.1 (hackathon medical navigator)"},
+                    )
+                except httpx.HTTPError as exc:
+                    last_error = str(exc)
+                    continue
+                if response.status_code >= 400:
+                    last_error = f"status {response.status_code}"
+                    continue
+                elements = response.json().get("elements", [])
+                break
     except httpx.HTTPError as exc:
-        raise HTTPException(status_code=502, detail=f"Could not reach location provider: {exc}") from exc
+        raise HTTPException(status_code=502, detail="Could not reach location provider") from exc
 
-    if response.status_code >= 400:
-        raise HTTPException(status_code=502, detail=f"Location provider returned {response.status_code}")
-
-    elements = response.json().get("elements", [])
+    if elements is None:
+        raise HTTPException(status_code=502, detail=f"Could not reach location provider: {last_error}")
 
     results: list[Facility] = []
     for el in elements:

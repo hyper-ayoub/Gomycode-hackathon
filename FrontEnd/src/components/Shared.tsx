@@ -1,19 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import {
   WarningCircle,
   SpeakerHigh,
   Stop,
   CircleNotch,
   ArrowUpRight,
-  FirstAidKit,
 } from "@phosphor-icons/react";
 import type { Language, Translate } from "../types";
+import { apiError, nearbyPharmacies, type Facility } from "../lib/api";
+import { Logo } from "./Logo";
 export function Brand({ small = false }: { small?: boolean }) {
   return (
     <div className={`brand ${small ? "small" : ""}`}>
-      <span className="brand-icon">
-        <FirstAidKit size={26} weight="fill" />
-      </span>
+      <Logo />
       <span>
         Darija<span className="brand-light">Doc</span>
         <small>صحتك، بكلام بسيط</small>
@@ -147,16 +146,103 @@ export function AudioButton({
     </div>
   );
 }
-export function PharmacyLink({ t }: { t: Translate }) {
+const MAPS_FALLBACK = "https://www.google.com/maps/search/pharmacie/";
+function mapsLink(place: Facility) {
+  return `https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lon}`;
+}
+export function PharmacyLink({
+  t,
+  variant = "link",
+}: {
+  t: Translate;
+  variant?: "link" | "sidebar";
+}) {
+  const [status, setStatus] = useState<"idle" | "loading" | "ready" | "error">(
+    "idle",
+  );
+  const [places, setPlaces] = useState<Facility[]>([]);
+  const [notice, setNotice] = useState("");
+  const label =
+    variant === "sidebar"
+      ? t("Une pharmacie près de moi", "صيدلية قريبة ليا")
+      : t("Trouver une pharmacie", "قلب على صيدلية");
+  function find() {
+    if (status === "loading") return;
+    setNotice("");
+    if (!navigator.geolocation) {
+      window.open(MAPS_FALLBACK, "_blank", "noopener");
+      return;
+    }
+    setStatus("loading");
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const results = await nearbyPharmacies(
+            position.coords.latitude,
+            position.coords.longitude,
+          );
+          setPlaces(results);
+          setStatus("ready");
+          if (results.length === 0) {
+            setNotice(
+              t(
+                "Aucune pharmacie trouvée dans les 5 km. La carte reste disponible.",
+                "ما لقيناش صيدلية فـ 5 كم. الخريطة باقية متاحة.",
+              ),
+            );
+          }
+        } catch (err) {
+          setPlaces([]);
+          setStatus("error");
+          setNotice(apiError(err, t, "places"));
+        }
+      },
+      () => {
+        setStatus("error");
+        setNotice(
+          t(
+            "La position n’est pas disponible. Ouvrez la carte pour chercher une pharmacie.",
+            "الموقع ما متوفرش. حل الخريطة باش تقلب على صيدلية.",
+          ),
+        );
+      },
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 },
+    );
+  }
   return (
-    <a
-      className="text-link"
-      href="https://www.google.com/maps/search/pharmacie/"
-      target="_blank"
-      rel="noreferrer"
-    >
-      {t("Trouver une pharmacie", "قلب على صيدلية")}
-      <ArrowUpRight size={17} />
-    </a>
+    <div className={variant === "sidebar" ? "sidebar-pharmacy-block" : "nearby-block"}>
+      <button
+        type="button"
+        className={variant === "sidebar" ? "sidebar-pharmacy" : "text-link"}
+        onClick={find}
+        disabled={status === "loading"}
+      >
+        {status === "loading" ? t("Recherche…", "كنقلبو…") : label}
+        <ArrowUpRight size={variant === "sidebar" ? 16 : 17} />
+      </button>
+      {places.length > 0 && (
+        <ul className="nearby-list">
+          {places.map((place) => (
+            <li key={`${place.lat},${place.lon},${place.name}`}>
+              <a href={mapsLink(place)} target="_blank" rel="noreferrer">
+                <span>{place.name}</span>
+                <small>{place.distance_km.toFixed(1)} km</small>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+      {notice && <p className="nearby-status">{notice}</p>}
+      {status === "error" && (
+        <a
+          className="nearby-status"
+          href={MAPS_FALLBACK}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {t("Ouvrir la carte", "حل الخريطة")}
+        </a>
+      )}
+    </div>
   );
 }

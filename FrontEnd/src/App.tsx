@@ -7,10 +7,21 @@ import { ChatTab } from "./features/ChatTab";
 import { AccuracyTab } from "./features/AccuracyTab";
 import { demoExplanation } from "./lib/demo";
 export default function App() {
-  const [tab, setTab] = useState<Tab>("explain");
-  const [language, setLanguage] = useState<Language>("fr");
-  const [result, setResult] = useState<Explanation | null>(null);
-  const [demo, setDemo] = useState(false);
+  const params = new URLSearchParams(window.location.search);
+  const initialLanguage: Language = params.get("lang") === "fr" ? "fr" : "ary";
+  const initialTab = params.get("tab");
+  const [tab, setTab] = useState<Tab>(
+    initialTab === "accuracy" ||
+      initialTab === "chat" ||
+      initialTab === "treatment"
+      ? initialTab
+      : "explain",
+  );
+  const [language, setLanguage] = useState<Language>(initialLanguage);
+  const [result, setResult] = useState<Explanation | null>(() =>
+    params.get("demo") === "1" ? demoExplanation(initialLanguage) : null,
+  );
+  const [demo, setDemo] = useState(params.get("demo") === "1");
   const [plan, setPlan] = useState<Plan | null>(null);
   const [review, setReview] = useState(false);
   const t: Translate = (fr, ary) => (language === "fr" ? fr : ary);

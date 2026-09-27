@@ -339,8 +339,9 @@ def validate_prescription(result, errors, warnings):
 
 
 def expected_tts_priority(input_language):
-    """The app must speak the language the patient wrote in, emergencies too."""
-    return "french" if input_language == "french" else "darija"
+    """Darija is spoken first for every input language, including French."""
+    del input_language
+    return "darija"
 
 
 def validate(result, expect_emergency=None, expect_tts_priority=None):

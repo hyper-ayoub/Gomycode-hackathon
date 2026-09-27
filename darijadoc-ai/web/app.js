@@ -747,7 +747,8 @@ function renderExtraction(rx) {
     if (m.dosage) top.append(el("span", "med-dose", m.dosage));
     c.append(top);
 
-    if (m.purpose_french) c.append(el("div", "med-purpose", m.purpose_french));
+    const purpose = m.purpose_darija_arabic || m.purpose_darija || m.purpose_french;
+    if (purpose) c.append(el("div", "med-purpose", purpose));
 
     const meta = el("div", "med-meta");
     const tag = (txt, cls) => meta.append(el("span", `tag ${cls || ""}`, txt));
@@ -770,13 +771,11 @@ function renderProse(r) {
   const box = $("#prose");
   box.innerHTML = "";
 
-  // tts_priority decides which language the app speaks first. Only the French
-  // and Arabic copies are ever spoken; the Latin Darija is display-only, which
-  // is why it is not in voice.js buildParts().
-  const frenchFirst = r.tts_priority === "french";
-  const spoken = frenchFirst
-    ? [["explanation_french", "Français"], ["explanation_darija_arabic", "Darija (Arabic script)"]]
-    : [["explanation_darija_arabic", "Darija (Arabic script)"], ["explanation_french", "Français"]];
+  // Darija in Arabic script is shown and spoken first. French stays underneath.
+  const spoken = [
+    ["explanation_darija_arabic", "Darija (Arabic script)"],
+    ["explanation_french", "Français"],
+  ];
 
   spoken.forEach(([key, label], i) => {
     if (!r[key]) return;
@@ -808,8 +807,8 @@ function renderSteps(r) {
   for (let i = 0; i < n; i++) {
     const li = el("li");
     const wrap = el("div");
-    if (lat[i]) wrap.append(el("div", null, lat[i]));
     if (steps[i]) wrap.append(el("div", "txt ar", steps[i]));
+    if (lat[i]) wrap.append(el("div", null, lat[i]));
     li.append(wrap);
     // Step 1 is the urgent one in an emergency; voice.js owns that styling.
     if (r.emergency && i === 0) styleEmergencyStep(li);

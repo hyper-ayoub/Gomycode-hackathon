@@ -7,10 +7,12 @@ import {
   ArrowRight,
   Trash,
   WarningCircle,
+  Microphone,
+  Stop,
 } from "@phosphor-icons/react";
 import type { Explanation, Language, Message, Translate } from "../types";
 import { AudioButton, Loader } from "../components/Shared";
-import { chat } from "../lib/api";
+import { apiError, chat, transcribe } from "../lib/api";
 export function ChatTab({
   t,
   language,
@@ -25,13 +27,75 @@ export function ChatTab({
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
+  const [recording, setRecording] = useState(false);
   const [error, setError] = useState("");
   const end = useRef<HTMLDivElement>(null);
+  const recorder = useRef<MediaRecorder | null>(null);
+  const stream = useRef<MediaStream | null>(null);
   useEffect(() => {
     end.current?.scrollIntoView({ behavior: "instant", block: "nearest" });
   }, [messages]);
+  useEffect(
+    () => () => {
+      const active = recorder.current;
+      if (active && active.state !== "inactive") {
+        active.onstop = null;
+        active.stop();
+      }
+      stream.current?.getTracks().forEach((track) => track.stop());
+    },
+    [],
+  );
+  async function toggleMic() {
+    if (demo || busy) return;
+    if (recording && recorder.current) {
+      recorder.current.stop();
+      return;
+    }
+    if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") {
+      setError(apiError(new Error("MIC_DENIED"), t, "voice"));
+      return;
+    }
+    try {
+      const next = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.current = next;
+      const mime = MediaRecorder.isTypeSupported("audio/webm")
+        ? "audio/webm"
+        : MediaRecorder.isTypeSupported("audio/mp4")
+          ? "audio/mp4"
+          : "";
+      const rec = new MediaRecorder(next, mime ? { mimeType: mime } : undefined);
+      const chunks: Blob[] = [];
+      rec.ondataavailable = (event) => {
+        if (event.data.size) chunks.push(event.data);
+      };
+      rec.onstop = async () => {
+        next.getTracks().forEach((track) => track.stop());
+        stream.current = null;
+        setRecording(false);
+        const blob = new Blob(chunks, { type: rec.mimeType || mime || "audio/webm" });
+        if (!blob.size) return;
+        setBusy(true);
+        setError("");
+        try {
+          const text = await transcribe(blob);
+          setInput((current) => (current.trim() ? `${current.trim()} ${text}` : text));
+        } catch (err) {
+          setError(apiError(err, t, "voice"));
+        } finally {
+          setBusy(false);
+        }
+      };
+      recorder.current = rec;
+      rec.start();
+      setRecording(true);
+      setError("");
+    } catch {
+      setError(apiError(new Error("MIC_DENIED"), t, "voice"));
+    }
+  }
   async function send(text = input) {
-    if (!text.trim() || busy) return;
+    if (!text.trim() || busy || recording) return;
     const next: Message[] = [
       ...messages,
       { role: "user", content: text.trim() },
@@ -56,15 +120,10 @@ export function ChatTab({
         const answer = await chat(next, language, result);
         setMessages([...next, answer]);
       }
-    } catch {
+    } catch (err) {
       setMessages(messages);
       setInput(text);
-      setError(
-        t(
-          "La réponse n’est pas disponible. Vérifiez le serveur puis renvoyez votre question.",
-          "الجواب ما متوفرش. تأكد من الخادم وعاود صيفط السؤال.",
-        ),
-      );
+      setError(apiError(err, t, "chat"));
     } finally {
       setBusy(false);
     }
@@ -229,9 +288,25 @@ export function ChatTab({
                 }
               }}
             />
+            {!demo && (
+              <button
+                type="button"
+                className={`mic-button ${recording ? "recording" : ""}`}
+                disabled={busy}
+                onClick={toggleMic}
+                aria-pressed={recording}
+                aria-label={
+                  recording
+                    ? t("Arrêter l’enregistrement", "وقف التسجيل")
+                    : t("Dicter une question", "قول السؤال")
+                }
+              >
+                {recording ? <Stop size={18} weight="fill" /> : <Microphone size={18} />}
+              </button>
+            )}
             <button
               className="send-button"
-              disabled={!input.trim() || busy}
+              disabled={!input.trim() || busy || recording}
               aria-label={t("Envoyer la question", "صيفط السؤال")}
             >
               <ArrowUp size={22} />

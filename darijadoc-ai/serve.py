@@ -1,5 +1,9 @@
 """Local test UI for DarijaDoc.
 
+The same routes are mounted by Backend/main.py, which is the server to run
+when the React app and this bench should share one API. This file can still
+run alone:
+
 Run: .venv/bin/python serve.py     ->  http://127.0.0.1:8000
 
 Standard library only, so requirements.txt stays three lines. Every request goes

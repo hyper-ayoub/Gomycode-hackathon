@@ -23,7 +23,7 @@ import {
   Loader,
   PharmacyLink,
 } from "../components/Shared";
-import { explain } from "../lib/api";
+import { apiError, explain } from "../lib/api";
 import { demoExplanation } from "../lib/demo";
 export function ExplainTab({
   language,
@@ -98,13 +98,8 @@ export function ExplainTab({
       setResult(await explain(file, language));
       setResponseLanguage(language);
       setDemo(false);
-    } catch {
-      setError(
-        t(
-          "L’analyse n’a pas abouti. Vérifiez que le serveur est disponible puis réessayez. Votre fichier est conservé ici.",
-          "ما قدرناش نكملو التحليل. تأكد من الخادم وعاود جرب. الملف باقي هنا.",
-        ),
-      );
+    } catch (err) {
+      setError(apiError(err, t, "explain"));
     } finally {
       setBusy(false);
     }

@@ -2,7 +2,11 @@
 
 The backend was not present when this UI was built. These are the request and response shapes the frontend currently expects; align `src/lib/api.ts` with the team's final schema. No provider API keys belong in this frontend.
 
-Set `VITE_API_URL` in `.env` (default `http://localhost:8000`). Allow the Vite origin, usually `http://localhost:5173`, in FastAPI CORS. UI upload limit: 10 MiB, JPEG/PNG/WebP/PDF; enforce the same server-side. Requests time out after 60 seconds.
+The backend implements this contract. `POST /explain` with `multipart/form-data` (`file`, `language`) returns the document object below. The same path still accepts `application/json` `{ "text", "audience" }` and returns `{ "text", "explanation" }` for a short term.
+
+`POST /chat` accepts the message list below and returns `{ "reply", "emergency", "session_id" }`. A single `{ "message", "session_id" }` body still works for older clients. `POST /voice/transcribe` turns a recording into `{ "text" }`. `GET /location/nearby` returns pharmacies around a coordinate.
+
+Set `VITE_API_URL` in `.env` (default `http://localhost:8000`). In development the API allows the Vite origin (`http://localhost:5173`) and other local origins. UI upload limit: 10 MiB, JPEG/PNG/WebP/PDF; the server enforces the same limit. Chat requests time out after 60 seconds. Document analysis allows 120 seconds.
 
 ## POST /explain
 
