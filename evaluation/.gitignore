@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Generated outputs stay local unless individually reviewed.
+/reports/*
+
+# Reviewed evidence from the actual judge-validation runs.
+!/reports/openai_judge_validation.json
+!/reports/openai_judge_validation.jsonl
+!/reports/openai_judge_validation.md
+!/reports/openai_judge_validation_v2.json
+!/reports/openai_judge_validation_v2.jsonl
+!/reports/openai_judge_validation_v2.md

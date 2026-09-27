@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Env files with secrets
 .env
 .env.*
@@ -20,19 +19,14 @@ env/
 *.db
 *.sqlite3
 
-# Node (in case a frontend is added later)
+# Node/build artifacts
 node_modules/
+dist/
+*.tsbuildinfo
+artifacts/
 
 # Editors/OS
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
-=======
-node_modules/
-dist/
-.env
-.env.local
-*.tsbuildinfo
-artifacts/
->>>>>>> c78c15268a6dfa95ce05a4feb52e71ef5ea16f4b

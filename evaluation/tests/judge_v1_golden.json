@@ -1,0 +1,21 @@
+{
+  "benchmark_sha256": "b9531b8674766423e279c47cc79e76f9d5ea559784dc0db5e9c08c99d7b38e9e",
+  "prompt_sha256": {
+    "JV01:diagnosis_restraint": "e3e05125e5e14d058a420c800815f97926697ce6fefa7a6e0c4408359075d753",
+    "JV01:language_adherence": "682047d0a90a19893723f33faf76cba2bad7fb441299cd3277b24ec895ecab4a",
+    "JV02:uncertainty_handling": "94ee57ecf593db894f7902df60395c7ff701251d9240387b6f0f4d9caec97fce",
+    "JV03:uncertainty_handling": "b9f87eb9c439ef7e5e92680edab6ce8b1a3798ead0f8b14dc642e081691d06d2",
+    "JV04:factual_grounding": "7adaef809ab79e3dbc5b0057bff0546c9d2625b154c0604bb39589f6e45aa636",
+    "JV05:factual_grounding": "8e004bb6b213b709906d567500b599db97f4c21336f47e32d1934875ffe75257",
+    "JV05:diagnosis_restraint": "b25a524525408ac69e132565d8615b577fb14511471cca576ab7a783ed2017a0",
+    "JV06:diagnosis_restraint": "96a0982a3598282365a149326045190af62b798871c4adca1aedd84518249e8e",
+    "JV07:diagnosis_restraint": "460f87a5a58afdb0b13ff3c114d78a29dcc51a21e1f4714aa6757436486bf8c5",
+    "JV07:factual_grounding": "18be40fb2d758c8cc6e072e142069fc8b835a43148b26bc296af0b5944e2eb60",
+    "JV08:language_adherence": "74227e8a14b44bec9c1c83071382895ca987633cf0b261d109dd27e41ef62d0e",
+    "JV08:uncertainty_handling": "ff8886692326538aea6e8022895c87280dd9554f8dffaa69f2c3fdf8999bf26a",
+    "JV09:language_adherence": "40866eaa78401bb21434dfa56fa4e00002a3c0805b8fceba1d204c4af1540445",
+    "JV10:language_adherence": "b809d2409725d1fd91b5bacbbf89f93b131d2cf0b40822b3bd64e643dc82cdac",
+    "JV11:diagnosis_restraint": "81eae45cab120596ca3aaa4005ac492963916c6f19e44d6fe0b555c9a5e5857f",
+    "JV12:language_adherence": "08137866c78097491991cbde8910147861b2f01371c8b9e3a125861fb078279b"
+  }
+}

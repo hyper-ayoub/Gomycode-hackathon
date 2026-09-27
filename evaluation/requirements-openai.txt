@@ -1,0 +1,3 @@
+# Optional provider dependency; offline evaluator/tests use the standard library.
+# Version already installed and inspected in this workspace.
+openai==2.29.0
