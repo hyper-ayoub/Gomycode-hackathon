@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DarijaDoc — local test</title>
+<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='14'>🩺</text></svg>">
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <span class="logo">🩺</span>
+    <div>
+      <h1>DarijaDoc</h1>
+      <p class="sub">local test bench</p>
+    </div>
+  </div>
+  <div class="top-right">
+    <span class="badge" id="modelBadge">…</span>
+    <button class="icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">◐</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ------------------------------- input ------------------------------- -->
+  <section class="panel input">
+    <div class="tabs" role="tablist">
+      <button class="tab is-on" data-tab="ask" role="tab" aria-selected="true">Ask</button>
+      <button class="tab" data-tab="rx" role="tab" aria-selected="false">Ordonnance photo</button>
+    </div>
+
+    <!-- ask -->
+    <div class="tabpane is-on" data-pane="ask">
+      <textarea id="q" rows="4" spellcheck="false"
+        placeholder="Type in Darija, like a patient would…"></textarea>
+
+      <div class="row">
+        <label class="chk" title="Strips tashkeel and tatweel from Arabic fields before display. Same as the harness default.">
+          <input type="checkbox" id="sanitize" checked> strip Arabic diacritics
+        </label>
+        <button class="btn primary" id="askBtn">Ask</button>
+      </div>
+
+      <details class="samples">
+        <summary>Test cases <span class="count" id="sampleCount"></span></summary>
+        <div class="chips" id="sampleChips"></div>
+      </details>
+    </div>
+
+    <!-- ordonnance -->
+    <div class="tabpane" data-pane="rx">
+      <label class="drop" id="drop">
+        <input type="file" id="file" accept="image/*" hidden>
+        <span class="drop-icon">＋</span>
+        <b>Drop a photo, or click to choose</b>
+        <small id="fileName">A real phone photo works better than the fixtures.</small>
+      </label>
+
+      <details class="samples" open>
+        <summary>Generated fixtures <span class="count" id="fixtureCount"></span></summary>
+        <div class="chips" id="fixtureChips"></div>
+      </details>
+
+      <!-- pre-upload quality check: filled in by app.js after a file is picked -->
+      <div class="quality" id="quality" hidden></div>
+
+      <button class="btn primary block" id="rxBtn" disabled>Read the ordonnance</button>
+    </div>
+  </section>
+
+  <!-- ------------------------------- result ------------------------------ -->
+  <section class="panel result" id="resultPanel">
+    <div class="empty" id="empty">
+      <p>Nothing yet.</p>
+      <p class="dim">Pick a test case on the left, or type a question.</p>
+    </div>
+
+    <div id="out" hidden>
+      <!-- harness verdict -->
+      <div class="verdict" id="verdict">
+        <span class="dot" id="verdictDot"></span>
+        <b id="verdictText">—</b>
+        <span class="dim" id="verdictMs"></span>
+      </div>
+      <ul class="notes" id="notes" hidden></ul>
+
+      <!-- emergency -->
+      <div class="alert alert-red" id="emergency" hidden>
+        <span class="alert-icon">⚠</span>
+        <div>
+          <b>Emergency</b>
+          <p id="emergencyReason"></p>
+        </div>
+      </div>
+
+      <!-- meta + voice -->
+      <div class="metabar">
+        <div class="pills" id="pills"></div>
+        <div class="voice">
+          <button class="btn" id="speakBtn">🔊 Play</button>
+          <span class="dim tiny" id="voiceNote"></span>
+        </div>
+      </div>
+
+      <div class="sanitized" id="sanitized" hidden></div>
+
+      <!-- pharmacy / hospital lookup. Shown only when the model asks for it, or
+           when it is an emergency. Never prompts for location on load. -->
+      <div class="places-wrap" id="places" hidden></div>
+
+      <!-- photo beside extraction -->
+      <div class="split" id="split" hidden>
+        <figure class="photo">
+          <img id="photoImg" alt="Uploaded ordonnance">
+          <figcaption>Source photo — always show this beside the extraction</figcaption>
+        </figure>
+        <div class="extract" id="extract"></div>
+      </div>
+
+      <div class="confirm" id="confirm" hidden></div>
+
+      <!-- prose -->
+      <div id="prose"></div>
+
+      <!-- next steps -->
+      <div id="steps"></div>
+
+      <p class="disclaimer" id="disclaimer"></p>
+
+      <details class="raw">
+        <summary>Raw JSON</summary>
+        <pre id="raw"></pre>
+      </details>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast" hidden></div>
+
+<!-- Classic script, not a module: Leaflet's UMD build assigns to the global
+     object, and map.js reads window.L. Vendored, so the map works offline. -->
+<script src="/vendor/leaflet/leaflet.js"></script>
+<script type="module" src="/app.js"></script>
+</body>
+</html>

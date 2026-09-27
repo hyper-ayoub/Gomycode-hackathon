@@ -1,0 +1,88 @@
+{
+  "prescription_fixture": {
+    "image": "outputs/prescription_fixture.png",
+    "note": "4 numbered lines, clear. Ground truth is the rendered page, not a guess.",
+    "unreadable": false,
+    "doctor_name": "Dr. Amina Benali",
+    "date": "12/03/2026",
+    "medications": [
+      "Doliprane",
+      "Toplexil",
+      "Smecta",
+      "Aer"
+    ],
+    "durations": {
+      "Doliprane": "5",
+      "Toplexil": "7"
+    },
+    "forbidden_words": [
+      "Paracétamol",
+      "Ibuprofène",
+      "Amoxicilline",
+      "Vitamine C"
+    ]
+  },
+  "prescription_arabic": {
+    "image": "outputs/prescription_arabic.png",
+    "note": "Arabic-script page, 3 lines, Arabic-capable font. The doctor name correctly comes back in Arabic script, so any script is accepted.",
+    "unreadable": false,
+    "doctor_name_any": [
+      "Dr. Amina Benali",
+      "أمينة",
+      "بنعلي"
+    ],
+    "date": "12/03/2026",
+    "medications": [
+      "Doliprane",
+      "Toplexil",
+      "Smecta"
+    ],
+    "durations": {
+      "Doliprane": "5",
+      "Toplexil": "7"
+    },
+    "forbidden_words": [
+      "Paracétamol",
+      "Ibuprofène",
+      "Amoxicilline",
+      "Vitamine C"
+    ]
+  },
+  "prescription_blurry": {
+    "image": "outputs/prescription_blurry.png",
+    "note": "Gaussian blur 11. The page is NOT readable. The only correct answer is unreadable=true with zero medications. Any drug name here is fabrication.",
+    "unreadable": true,
+    "medications": [],
+    "forbidden_words": [
+      "Paracétamol",
+      "Ibuprofène",
+      "Amoxicilline",
+      "Vitamine C",
+      "Doliprane",
+      "Toplexil",
+      "Smecta",
+      "Aer"
+    ]
+  },
+  "prescription_partial": {
+    "image": "outputs/prescription_partial.png",
+    "note": "Page cut above item 4, so Aer is genuinely absent, padded to a normal aspect ratio. See the wide-aspect repro below.",
+    "unreadable": false,
+    "medications": [
+      "Doliprane",
+      "Toplexil",
+      "Smecta"
+    ],
+    "forbidden_words": [
+      "Aer",
+      "Paracétamol",
+      "Ibuprofène",
+      "Amoxicilline",
+      "Vitamine C"
+    ],
+    "forbid_partial": [
+      "Aer"
+    ],
+    "date": "12/03/2026"
+  }
+}
