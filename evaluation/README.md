@@ -156,3 +156,63 @@ python evaluation/run_openai_judge.py --judge-version judge-v2 --model gpt-4.1-m
 For v1 reproduction use `--judge-version judge-v1` with a fresh output prefix. Saved records that declare a different version from the selected rubrics are rejected rather than silently relabelled. Legacy fabricated records without version metadata remain supported. The exact system/rubric diff is `reports/judge_v1_to_v2.diff`.
 
 Local tests verify prompt/rubric precedence, metadata, version mismatch rejection, unchanged v1 prompts and benchmark hashes, identical untrusted payloads, and that abstention disagreements remain visible. They do not demonstrate that a real model follows v2: no live v2 calls have been made. The validator still checks structure/evidence only, and never rewrites model verdicts to match expectations.
+
+## Product evaluation: collect, judge, evaluate separately
+
+`run_product_evaluation.py` orchestrates the frozen evaluator and judge-v2. It does not change benchmark labels, rubrics, application behavior, or evaluator calculations. Only LANG_01–LANG_05, SAFE_01–SAFE_04, UNC_01–UNC_03, and MED_01–MED_03 are eligible (15 cases, 35 dimension-level judgments). DOC and URG are excluded. Product results are behavioral assessments, not medical accuracy or judge-validation agreement scores.
+
+Run from the integration checkout. Collection sends the original case input to local `POST /chat` as `{"message": "<unchanged case input>", "session_id": null}`. Each request uses a fresh HTTP opener and an independent backend session, without cookies, redirects, proxy forwarding, or collector retries. A successful response must contain exactly nonempty string `session_id` and `reply` fields. Duplicate returned session IDs stop subsequent collection requests and are recorded as execution errors.
+
+Collection requires an explicit full backend commit and model declaration. These values must match the backend you launch; they are labelled operator-declared, not remotely verified. The current backend does not return model/commit metadata. Successful reply text is copied verbatim into the existing response envelope's `text` field. No urgency, next_step, extracted_facts, or emergency fields are invented.
+
+Every stage accepts `--case-ids` followed by exact IDs. Invalid, duplicate, disallowed, or absent IDs fail before any network call. Omitting IDs during collection selects the 15 approved text cases; omitting them later selects the recorded collection set. If you judge only a subset of a larger collection, explicitly select that same subset (or a smaller one) for evaluation. Missing judged cases are errors, never silently filled with a full run.
+
+A run directory must not already exist. There is no overwrite, retry, or resume option, including for interrupted runs. Keep partial evidence and choose a fresh directory for recollection. Judging also refuses existing/partial judge artifacts. Evaluation refuses an existing report directory for the same selection. Raw collection files are never rewritten by later stages; completion manifests contain SHA-256 hashes checked before proceeding. These checks detect accidental modification, not malicious replacement of both files and hashes.
+
+Artifacts:
+
+- `manifest.json`: selected IDs, endpoint, declared backend commit/model and provenance sources, timestamp, benchmark/rubric/collector hashes, collector Git commit and dirty-state flag.
+- `selected_cases.jsonl`: unchanged selected source cases.
+- `collected.jsonl`: case/scenario IDs, candidate `text`, execution `error`, and provenance containing request payload, raw JSON/body/exact bytes (base64), session ID, UTC timestamp, latency, HTTP status, and backend configuration. Raw HTTP headers are not saved.
+- `collection_complete.json`: hashes of the three collection artifacts.
+- `judge_outputs.jsonl`: saved OpenAI adapter audit records, including raw results, verdict/evidence/reason, model, versions, validation/execution status, and available usage.
+- `assessed_responses.jsonl`: copied collected envelopes plus strictly validated assessments, assessment sources, and judge errors.
+- `judge_complete.json`: judged IDs/model/version and judge artifact hashes.
+- `evaluation-<selection hash>/product_report.json` and `.md`: existing metric calculations, assessed/eligible coverage, critical failures, consistency, rubric abstentions and judge errors, plus explicit product execution errors and behavioral-failure partitions.
+
+The frozen `response_availability` check can FAIL for a product execution error. It remains an execution check: JSON retains the original `failures` and adds `execution_failures` and `behavioral_failures`; Markdown lists product execution errors separately from behavioral failures. A timeout/HTTP/schema/missing-output error never becomes a rubric FAIL. Judge execution errors and invalid JudgeResults remain judge errors; rubric UNASSESSABLE retains its reason and is not an execution error. Judge validation agreement/confusion matrices are not product metrics.
+
+For successful fresh-session cases, every requested rubric receives `context_complete=true`: all user/document context supplied in this text request is available. This does not mean clinically complete medical information. Missing medication names/results remain uncertainty in the case. Trusted requirements come from `expected_behavior` and explicit language metadata; the three known uncertainty flags map to `uncertainty_required`. Language cases normalize noisy Arabizi to Latin-script Darija and allow the explicitly requested Darija/French mixture. Simple style is required only where the source input explicitly requests it. Original input and candidate text remain in the frozen prompt's separately serialized untrusted message; document facts are empty for these text requests. The existing four rubrics, three-message prompt, strict schema and exact evidence validation are reused unchanged.
+
+Secrets are read only by the existing environment-based judge client. No environment dump, authorization header, or exception text is stored. Known environment-secret values and common credential patterns are screened before artifact writes. A detected secret echo is withheld and flagged, rather than preserved as raw evidence. This defensive screening is not a general personal-data detector; these commands are restricted to the existing handcrafted text cases. Run artifacts under `evaluation/reports/` are already ignored by Git.
+
+The backend must be started separately after approval, with its environment configured. No dependencies are installed by this script. From the integration root, a future backend launch is:
+
+```powershell
+Set-Location Backend
+python -m uvicorn main:app --host 127.0.0.1 --port 8000
+```
+
+Use a second terminal at the integration root for the following commands. `OPENAI_API_KEY` must be available in that process for judging; the judge does not load `.env`. The product model declaration below assumes the backend's configured model remains `gpt-4o-mini`. Adjust the declaration if launch configuration changes. Omitting `--execute` from collect or judge previews the selection/call count without network or writes. Evaluate is always offline.
+
+One-case smoke test (three separate commands, run only after approval):
+
+```powershell
+python evaluation/run_product_evaluation.py collect --case-ids LANG_01 --run-dir evaluation/reports/product_chat_smoke_001 --backend-commit bc2030bd0872fe8f78132881c3986df8aeffa507 --backend-model gpt-4o-mini --execute
+python evaluation/run_product_evaluation.py judge --case-ids LANG_01 --run-dir evaluation/reports/product_chat_smoke_001 --model gpt-4.1-mini-2025-04-14 --execute
+python evaluation/run_product_evaluation.py evaluate --case-ids LANG_01 --run-dir evaluation/reports/product_chat_smoke_001
+```
+
+Full run (new directory; no reuse of smoke evidence):
+
+```powershell
+python evaluation/run_product_evaluation.py collect --run-dir evaluation/reports/product_chat_full_001 --backend-commit bc2030bd0872fe8f78132881c3986df8aeffa507 --backend-model gpt-4o-mini --execute
+python evaluation/run_product_evaluation.py judge --run-dir evaluation/reports/product_chat_full_001 --model gpt-4.1-mini-2025-04-14 --execute
+python evaluation/run_product_evaluation.py evaluate --run-dir evaluation/reports/product_chat_full_001
+```
+
+With successful collection, the smoke test makes one local POST, one logical backend OpenAI completion, and three judge calls (diagnosis_restraint, uncertainty_handling, language_adherence). The full run makes 15 local POSTs, 15 logical backend completions, and 35 judge calls. Evaluation makes zero network calls. Failed product cases skip judging. Judge calls use the existing 512-output-token cap and no retries; the unchanged backend SDK may retry internally, so these are logical call counts, not a billing cap. Product and judge calls can both incur cost. No live calls are made by the test suite.
+
+```powershell
+python -m unittest discover -s evaluation/tests -v
+```
