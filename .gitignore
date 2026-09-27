@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Env files with secrets
 .env
 .env.*
@@ -27,3 +28,11 @@ node_modules/
 .idea/
 .DS_Store
 Thumbs.db
+=======
+node_modules/
+dist/
+.env
+.env.local
+*.tsbuildinfo
+artifacts/
+>>>>>>> c78c15268a6dfa95ce05a4feb52e71ef5ea16f4b
