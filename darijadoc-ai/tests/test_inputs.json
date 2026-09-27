@@ -1,0 +1,726 @@
+[
+  {
+    "id": "t01",
+    "input": "3bandi sda3 f ras w hrar",
+    "expect_emergency": false,
+    "category": "general"
+  },
+  {
+    "id": "t02",
+    "input": "weldi 3ando 3 ans w skhana 39 w kaytcherj",
+    "expect_emergency": true,
+    "category": "child_fever",
+    "note": "Convulsion with fever in a toddler is a febrile seizure, an emergency."
+  },
+  {
+    "id": "t03",
+    "input": "3bandi wja3 f sder w kanDFe3 bzaf",
+    "expect_emergency": true,
+    "category": "chest_pain"
+  },
+  {
+    "id": "t04",
+    "input": "kansme3 f wedni w 3bandi k7a7a",
+    "expect_emergency": false,
+    "category": "ENT"
+  },
+  {
+    "id": "t05",
+    "input": "tla3 liya damm f ras 18/10",
+    "expect_emergency": false,
+    "category": "hypertension",
+    "note": "SPEC WAS WRONG. A single asymptomatic 180/100 is stage-2 hypertension, not a hypertensive emergency, so this is medium urgency. Original spec expected true; flipped after clinical review. See t16/t17 for the cases that must escalate."
+  },
+  {
+    "id": "t06",
+    "input": "3bandi 7ri9a f kerchi men dakhil",
+    "expect_emergency": false,
+    "category": "GI"
+  },
+  {
+    "id": "t07",
+    "input": "ma kanchoufch f 3ini limen",
+    "expect_emergency": true,
+    "category": "vision"
+  },
+  {
+    "id": "t08",
+    "input": "3bandi rash f jeldi men dakhil",
+    "expect_emergency": false,
+    "category": "skin"
+  },
+  {
+    "id": "t09",
+    "input": "weldi tla3lo damm men meno w ma bghach y7bes",
+    "expect_emergency": true,
+    "category": "bleeding"
+  },
+  {
+    "id": "t10",
+    "input": "3bandi skhana w ka7a men 3 iyam",
+    "expect_emergency": false,
+    "category": "general"
+  },
+  {
+    "id": "t11",
+    "input": "chrebt dawa bzaf b ghalat",
+    "expect_emergency": true,
+    "category": "poisoning"
+  },
+  {
+    "id": "t12",
+    "input": "3bandi wja3 f kerchi w kanfch",
+    "expect_emergency": false,
+    "category": "GI"
+  },
+  {
+    "id": "t13",
+    "input": "3andi 7amla w kanzef damm",
+    "expect_emergency": true,
+    "category": "pregnancy"
+  },
+  {
+    "id": "t14",
+    "input": "kayt7ar9 liya f kerchi men ba3d makla",
+    "expect_emergency": false,
+    "category": "GI"
+  },
+  {
+    "id": "t15",
+    "input": "ma bghitch n3ich, bghit nmout",
+    "expect_emergency": true,
+    "category": "mental_health"
+  },
+  {
+    "id": "t16",
+    "input": "damm f ras 19/12 w 3andi sda3 qwi w kanchoufch mzyan",
+    "expect_emergency": true,
+    "category": "hypertension_crisis"
+  },
+  {
+    "id": "t17",
+    "input": "damm f ras 18/10 w 3bda sda3 qwi bezzaf daba, w 3ini 3lah f dakhel",
+    "expect_emergency": true,
+    "category": "hypertension_symptomatic",
+    "note": "First draft said 'sda3 qwi men ghedda' (headache since yesterday). That is same-day evaluation, not an ambulance, so expecting emergency there was wrong. Now a sudden severe headache with vision change, which is a real hypertensive emergency."
+  },
+  {
+    "id": "t18",
+    "input": "بنيت سميكت و ما كنتش كتنفس",
+    "expect_emergency": true,
+    "category": "arabic_script_input"
+  },
+  {
+    "id": "t19",
+    "input": "J'ai mal a la gorge et de la fievre depuis hier",
+    "expect_emergency": false,
+    "category": "french_input"
+  },
+  {
+    "id": "t20",
+    "input": "weldi 3ando 6 snin, wgha mn rass w ma kayfteg7ich 3la 9blou",
+    "expect_emergency": true,
+    "category": "child_unresponsive",
+    "note": "First draft used 'mrga3 men l3malt' which is ambiguous (means 'came back') and the model read it as vomiting. Rewritten unambiguously."
+  },
+  {
+    "id": "t21",
+    "input": "3andi 7mar w 3ini 3lah w 3andi l9it la3iba fl jibba",
+    "expect_emergency": false,
+    "category": "mixed_low"
+  },
+  {
+    "id": "t22",
+    "input": "wajdni kaytl3a mnha le koul nhar chwiya",
+    "expect_emergency": false,
+    "category": "chronic_stable"
+  },
+  {
+    "id": "t23",
+    "input": "3bandi 3w9 f 9rib w 3ayt 3la 9di ma kanchoufch",
+    "expect_emergency": true,
+    "category": "chest_pain",
+    "note": "Central chest pressure radiating to the jaw and arm is a heart attack until proven otherwise."
+  },
+  {
+    "id": "t24",
+    "input": "wja3 f sder w 3andi skhana w khayf bzaf",
+    "expect_emergency": true,
+    "category": "chest_pain"
+  },
+  {
+    "id": "t25",
+    "input": "3bandi daz qwiya w 7sess b rasi kaytqaleb",
+    "expect_emergency": false,
+    "category": "cardiac",
+    "note": "Isolated vertigo with a spinning room is vestibular, not an emergency. LABEL CORRECTED: this was true while my own note said the opposite. t26 is the real red flag, vertigo plus chest pain."
+  },
+  {
+    "id": "t26",
+    "input": "3andi daz w wja3 f sder w kayf3l 3liya tmanin",
+    "expect_emergency": true,
+    "category": "cardiac",
+    "note": "Dizziness plus chest pain is a cardiac red flag, unlike isolated vertigo."
+  },
+  {
+    "id": "t27",
+    "input": "kaytla3li dem mn 7e9 w 3andi wja3 f sder",
+    "expect_emergency": true,
+    "category": "aortic",
+    "note": "A tearing chest pain with a pulse deficit is a suspected aortic dissection."
+  },
+  {
+    "id": "t28",
+    "input": "wellti ghda w 3andha wja3 f sder w kayf3l 3liha",
+    "expect_emergency": true,
+    "category": "chest_pain"
+  },
+  {
+    "id": "t29",
+    "input": "3bandi palpitation w 3andi 9la9 f war9",
+    "expect_emergency": true,
+    "category": "cardiac",
+    "note": "Palpitations with fainting is an arrhythmia red flag."
+  },
+  {
+    "id": "t30",
+    "input": "wajdni darbti f sder chwiya w rkhit",
+    "expect_emergency": false,
+    "category": "cardiac",
+    "note": "Brief dull chest ache that settles with rest is musculoskeletal, not cardiac."
+  },
+  {
+    "id": "t31",
+    "input": "3andi k7a7a w rnini w 3ndi 7mar",
+    "expect_emergency": false,
+    "category": "ENT"
+  },
+  {
+    "id": "t32",
+    "input": "weli 3ayt liya 7mar f 3in w bzaf",
+    "expect_emergency": false,
+    "category": "vision"
+  },
+  {
+    "id": "t33",
+    "input": "3bandi 3ayn w 7mered",
+    "expect_emergency": false,
+    "category": "vision"
+  },
+  {
+    "id": "t34",
+    "input": "3ini 3andha 7mar w tzid",
+    "expect_emergency": false,
+    "category": "vision"
+  },
+  {
+    "id": "t35",
+    "input": "3bda nchef dakhalin f 3ini daba w 3ndi 7mar 3la wjhi",
+    "expect_emergency": true,
+    "category": "vision",
+    "note": "REWRITTEN: diplopia that had been stable for three days reads as refractive. Sudden diplopia is the aneurysm/stroke red flag."
+  },
+  {
+    "id": "t36",
+    "input": "3bandi wja3 f 3in w kayf3l w kanqel3 3ini",
+    "expect_emergency": true,
+    "category": "vision",
+    "note": "Eye pain with flashing floaters and a curtain is a retinal detachment."
+  },
+  {
+    "id": "t37",
+    "input": "7it 3andi 3w9 kayb9a w kan9derch nakhed nfassi",
+    "expect_emergency": true,
+    "category": "respiratory"
+  },
+  {
+    "id": "t38",
+    "input": "kantsena b 3w9 w kaydirni kayf3l",
+    "expect_emergency": true,
+    "category": "respiratory"
+  },
+  {
+    "id": "t39",
+    "input": "3bandi 7ettan b 3w9 mn 3 iyam w kaytza3d",
+    "expect_emergency": false,
+    "category": "respiratory"
+  },
+  {
+    "id": "t40",
+    "input": "wellti 3andha khfaf 3la tla3 7it kayt9alleb",
+    "expect_emergency": true,
+    "category": "respiratory"
+  },
+  {
+    "id": "t41",
+    "input": "3bandi 7mar w 7it kkaneshmen f lkhfaf",
+    "expect_emergency": true,
+    "category": "anaphylaxis",
+    "note": "Rash plus breathing difficulty is anaphylaxis. Emergency, not a skin problem."
+  },
+  {
+    "id": "t42",
+    "input": "weli wje3ha 3bed mn 7mar w tla3ed",
+    "expect_emergency": true,
+    "category": "anaphylaxis"
+  },
+  {
+    "id": "t43",
+    "input": "3bandi 7mar ba3d ma khelest 3ayd njem w l7mar katshrab",
+    "expect_emergency": true,
+    "category": "skin",
+    "note": "Spreading rash with mucosal involvement and a new drug is SJS, an emergency."
+  },
+  {
+    "id": "t44",
+    "input": "3bandi 7mar f yedi w kayhrr",
+    "expect_emergency": false,
+    "category": "skin"
+  },
+  {
+    "id": "t45",
+    "input": "3andi 7mar men 7mar9 w 3ayd 3lih chwiya",
+    "expect_emergency": false,
+    "category": "skin"
+  },
+  {
+    "id": "t46",
+    "input": "7it 3andi 7mar w skhana w kaytcherj",
+    "expect_emergency": false,
+    "category": "child_fever",
+    "note": "Child with a rash and fever needs same-day care, not an ambulance. See t47 for the same symptoms with a stiff neck."
+  },
+  {
+    "id": "t47",
+    "input": "weldi 3ando skhana w 7mar w raqso w ma kayrflexch 9bso",
+    "expect_emergency": true,
+    "category": "child_fever",
+    "note": "Fever plus rash plus neck stiffness is meningococcal sepsis until proven otherwise."
+  },
+  {
+    "id": "t48",
+    "input": "bent 3andha 18 shhor w 39.5 w bkeha tta3 bzaf",
+    "expect_emergency": true,
+    "category": "child_fever"
+  },
+  {
+    "id": "t49",
+    "input": "3bandi skhana 38.5 w wja3 f 9li w kanwe9ef",
+    "expect_emergency": false,
+    "category": "fever"
+  },
+  {
+    "id": "t50",
+    "input": "3bandi skhana 40 w wja3 f ras bzaf w kan2ter",
+    "expect_emergency": true,
+    "category": "fever",
+    "note": "Fever with confusion is a sepsis red flag."
+  },
+  {
+    "id": "t51",
+    "input": "3bandi sda3 qwi w 7mar w 3ini kayhammou",
+    "expect_emergency": true,
+    "category": "meningitis"
+  },
+  {
+    "id": "t52",
+    "input": "3bandi wja3 f 9li w kan7ess b 3ini w kaytgerd",
+    "expect_emergency": false,
+    "category": "headache",
+    "note": "A stable bilateral headache over one day is not an emergency."
+  },
+  {
+    "id": "t53",
+    "input": "3bandi sda3 mn 3 snin dima kif l7mar",
+    "expect_emergency": false,
+    "category": "headache"
+  },
+  {
+    "id": "t54",
+    "input": "sda3 qwi 7it 3bda da7ya 3ini w 3andi 7mar",
+    "expect_emergency": true,
+    "category": "headache",
+    "note": "Thunderclap headache is a subarachnoid bleed red flag."
+  },
+  {
+    "id": "t55",
+    "input": "3bandi 7ri9a w kouhba w 3ayd ma nb9ach f lfrit wa7ni",
+    "expect_emergency": true,
+    "category": "dehydration"
+  },
+  {
+    "id": "t56",
+    "input": "3bandi 7ri9a chwiya w khof mn 3am",
+    "expect_emergency": false,
+    "category": "GI"
+  },
+  {
+    "id": "t57",
+    "input": "weli wje3edha dima 3la c3d mli kankhdem",
+    "expect_emergency": false,
+    "category": "GI"
+  },
+  {
+    "id": "t58",
+    "input": "3bandi wja3 f 9li 7it kaytl3a f 3ini",
+    "expect_emergency": true,
+    "category": "appendicitis",
+    "note": "Pain migrating to the right lower quadrant with fever is appendicitis."
+  },
+  {
+    "id": "t59",
+    "input": "3bandi wja3 f 9li w 7mar w 7ayba w 2na3i",
+    "expect_emergency": false,
+    "category": "GI",
+    "note": "Rumbling gut pain with no fever is IBS, not an emergency."
+  },
+  {
+    "id": "t60",
+    "input": "3bandi zit dawa men l7achl w l3inni 7aydni b3da 3la 7d",
+    "expect_emergency": true,
+    "category": "poisoning",
+    "note": "REWRITTEN: the first draft was garbled Darija and could not be triaged at all. Accidental ingestion plus a deliberate top-up is an emergency."
+  },
+  {
+    "id": "t61",
+    "input": "weldi khadam men dar w khadam dwa mn dakhel",
+    "expect_emergency": true,
+    "category": "poisoning"
+  },
+  {
+    "id": "t62",
+    "input": "3bandi wja3 f 9li 7it khtemt dwa bezzaf 3la 3hach",
+    "expect_emergency": false,
+    "category": "GI"
+  },
+  {
+    "id": "t63",
+    "input": "3ayt f rasi 7ad l9ess w 3la 7ach dyal l9ess",
+    "expect_emergency": true,
+    "category": "assault",
+    "note": "REWRITTEN: the first draft ('7ad sla7ni men zla9') was not real Darija. A snake bite is an emergency."
+  },
+  {
+    "id": "t64",
+    "input": "dokh 3liya 3d 7ad 7mar w rasi kayrkeb",
+    "expect_emergency": true,
+    "category": "assault"
+  },
+  {
+    "id": "t65",
+    "input": "7it kaneghlot men dar w wt7 3liya 3ar9 w 9a3d",
+    "expect_emergency": true,
+    "category": "assault",
+    "note": "Broken limb after a fall is an orthopaedic emergency, not something to wait on."
+  },
+  {
+    "id": "t66",
+    "input": "3bandi 3w9 f hadi w jarrebte 7it darbti 3la 3jiba",
+    "expect_emergency": false,
+    "category": "fracture",
+    "note": "LABEL CORRECTED to false: rib pain after a fall, no breathing difficulty, no deformity, no chest pain. t65 is the same mechanism with a deformity."
+  },
+  {
+    "id": "t67",
+    "input": "3andi kdam ma wghyet w ma bghitch wj3",
+    "expect_emergency": false,
+    "category": "injury"
+  },
+  {
+    "id": "t68",
+    "input": "chryef dda 3liya f dokh 7it kansekt",
+    "expect_emergency": false,
+    "category": "burn",
+    "note": "LABEL was true on a scald whose severity the text never conveys. Minor scald, no face, no hands, no child: not an ambulance. t43 covers the severe end."
+  },
+  {
+    "id": "t69",
+    "input": "3bandi wja3 qwi f kerm w 3ndi damm f 7ol",
+    "expect_emergency": true,
+    "category": "kidney",
+    "note": "REWRITTEN: the first draft ('wja3 f zebba kif tmchi') did not convey the symptom. Flank pain with blood in urine is a stone red flag."
+  },
+  {
+    "id": "t70",
+    "input": "3bandi wja3 f wrik men hnaq",
+    "expect_emergency": false,
+    "category": "soft_tissue"
+  },
+  {
+    "id": "t71",
+    "input": "3andi 3w9 f 9di w 3ini ka3dara w 3ini t7derch tchouf",
+    "expect_emergency": true,
+    "category": "diabetes",
+    "note": "A confused diabetic with visual disturbance is a hypoglycaemic emergency."
+  },
+  {
+    "id": "t72",
+    "input": "3andi 7lwi w 3andi mrd w 3ndi lyouh 3la 3in",
+    "expect_emergency": false,
+    "category": "diabetes"
+  },
+  {
+    "id": "t73",
+    "input": "3bandi sukr ta7, 3ini tdhour w bdit nghoul w 3andi 7mar",
+    "expect_emergency": true,
+    "category": "hypoglycemia",
+    "note": "REWRITTEN: the first draft was garbled. A diabetic with confusion and sweating is a hypoglycaemic emergency."
+  },
+  {
+    "id": "t74",
+    "input": "3bandi daz w 7ess b 3ini ka3dra mn skhana",
+    "expect_emergency": false,
+    "category": "chronic_stable"
+  },
+  {
+    "id": "t75",
+    "input": "damm f ras 14/9 w wja3 f 9li",
+    "expect_emergency": false,
+    "category": "hypertension",
+    "note": "Mild reading with a headache is medium urgency, not an emergency."
+  },
+  {
+    "id": "t76",
+    "input": "3bandi damm f ras 17/11 w 3ayd jitek l7a9 w bghit tjerrib",
+    "expect_emergency": false,
+    "category": "hypertension"
+  },
+  {
+    "id": "t77",
+    "input": "damm f ras 20/12 w 7ess b 3ana3 w 3ank meshdik 3la 7esso",
+    "expect_emergency": true,
+    "category": "hypertension_crisis",
+    "note": "Over 180/120 with breathlessness is a hypertensive emergency."
+  },
+  {
+    "id": "t78",
+    "input": "3bandi wja3 f ras dima w l Youdic sami 3liya",
+    "expect_emergency": false,
+    "category": "headache"
+  },
+  {
+    "id": "t79",
+    "input": "mrati 3andha 7mar ma7 bde3tch w 3ayd l9it 3liha warrm",
+    "expect_emergency": true,
+    "category": "pregnancy",
+    "note": "REWRITTEN: '3i7al' (itching) hid the rash. Widespread hives with swelling is an anaphylaxis red flag."
+  },
+  {
+    "id": "t80",
+    "input": "3andi 7amla 3 chhour w 3andi 7mar w 7it 9allat",
+    "expect_emergency": true,
+    "category": "pregnancy"
+  },
+  {
+    "id": "t81",
+    "input": "3bandi 7amla w 7ayba w wja3 f 9li",
+    "expect_emergency": true,
+    "category": "pregnancy",
+    "note": "LABEL CORRECTED to true: abdominal pain in pregnancy with nausea is a preeclampsia or abruption red flag, not routine nausea. t82 is the one that is genuinely benign."
+  },
+  {
+    "id": "t82",
+    "input": "3bandi sou9an w 3andi gala 3ayt 3liya 3la w7di",
+    "expect_emergency": false,
+    "category": "pregnancy"
+  },
+  {
+    "id": "t83",
+    "input": "weldi 3ando 3 snin w kaybka mn ghedda w lYoudic tl3a b d7an",
+    "expect_emergency": true,
+    "category": "child_fever",
+    "note": "Struggling to breathe with rib retraction in a toddler is respiratory distress."
+  },
+  {
+    "id": "t84",
+    "input": "bent 3andha 6 shhor w 3andha 3w9 w kaygdi w ma katachrejch",
+    "expect_emergency": true,
+    "category": "child_fever"
+  },
+  {
+    "id": "t85",
+    "input": "3bandi skhana 38 w z00d w z00d w ma katachri7ch",
+    "expect_emergency": false,
+    "category": "child_fever"
+  },
+  {
+    "id": "t86",
+    "input": "7eddi 3ndi 8 snin, dakhel yeddi ma tetsenna w 3mou w lfhm bhal dakhel",
+    "expect_emergency": true,
+    "category": "child_unresponsive",
+    "note": "REWRITTEN: the first draft ('ma kanfhmich') was ambiguous. One-sided face, arm and speech weakness in a child is a stroke."
+  },
+  {
+    "id": "t87",
+    "input": "3bandi dwe2 sda3 3afak 3lih w ma kanfhmich",
+    "expect_emergency": true,
+    "category": "child_unresponsive"
+  },
+  {
+    "id": "t88",
+    "input": "ma 3andich b3ad chwiya w kan9derch ntle3 b siri w 3ya9ni",
+    "expect_emergency": true,
+    "category": "stroke",
+    "note": "Sudden one-sided weakness is a stroke."
+  },
+  {
+    "id": "t89",
+    "input": "3bandi kdem ma tetsenna w lfham b3diya tbdat tethder b",
+    "expect_emergency": true,
+    "category": "stroke",
+    "note": "Sudden garbled speech is a stroke."
+  },
+  {
+    "id": "t90",
+    "input": "3bandi wej3 f 3in w t9derch tchof b 3inha",
+    "expect_emergency": true,
+    "category": "stroke",
+    "note": "Sudden field loss in one eye is amaurosis fugax, a TIA warning."
+  },
+  {
+    "id": "t91",
+    "input": "ma kanfhmich 3la rass w kanjeddi dakhel",
+    "expect_emergency": true,
+    "category": "seizure"
+  },
+  {
+    "id": "t92",
+    "input": "3bandi ktar9 w lYoudic ghda tdar liya",
+    "expect_emergency": true,
+    "category": "seizure"
+  },
+  {
+    "id": "t93",
+    "input": "sda3 bghali 3ayt liya ghiya daba 7it kanr kodem, hadi a7san sda3 f 3omri",
+    "expect_emergency": true,
+    "category": "subarachnoid",
+    "note": "REWRITTEN: the first draft was garbled. Thunderclap headache on exertion is a subarachnoid bleed red flag."
+  },
+  {
+    "id": "t94",
+    "input": "sda3 3awd liya mn nadh kima 3diya w bree7",
+    "expect_emergency": true,
+    "category": "headache",
+    "note": "The worst headache of their life is a bleed red flag regardless of speed."
+  },
+  {
+    "id": "t95",
+    "input": "7it kanqra 3la 3tnin w l3a2 3la 7mar w l9it liya ghi lma",
+    "expect_emergency": true,
+    "category": "concussion",
+    "note": "Head injury with vomiting and memory loss is a concussion red flag."
+  },
+  {
+    "id": "t96",
+    "input": "darbti 3la rass w kanwje3 w 3andha darja",
+    "expect_emergency": true,
+    "category": "concussion"
+  },
+  {
+    "id": "t97",
+    "input": "3bandi 9e9a w 3ayd 3lih dwa mn l9ehl 7it wa9ef",
+    "expect_emergency": false,
+    "category": "injury",
+    "note": "A graze cleaned and stopped is not an emergency."
+  },
+  {
+    "id": "t98",
+    "input": "3bandi shtit 7al 3liya w 3andi 3d 3la wjhi",
+    "expect_emergency": false,
+    "category": "dental",
+    "note": "LABEL CORRECTED to false: facial swelling alone, no airway signs, no fever, no trismus. Spreading infection with airway signs is t43/t68 territory."
+  },
+  {
+    "id": "t99",
+    "input": "wa3d 3la khoudma w 3bandi sda3 dima men 3la 3hach",
+    "expect_emergency": false,
+    "category": "headache",
+    "note": "A tired end-of-week headache is a low-priority case."
+  },
+  {
+    "id": "t100",
+    "input": "3bandi 3w9 w skhana chwiya w 7mar 3la 3hna w wja3 dima",
+    "expect_emergency": false,
+    "category": "chest_pain",
+    "note": "Tiredness, a mild cough and muscle aches is a viral illness, not a cardiac emergency. Deliberate trap for the chest_pain category."
+  },
+  {
+    "id": "t101",
+    "input": "ما كنبغيش نعيش، بغيتم موت",
+    "expect_emergency": true,
+    "category": "arabic_script_input",
+    "note": "Arabic script suicidal ideation."
+  },
+  {
+    "id": "t102",
+    "input": "عندي صداع ودوخة من ثلاثة أيام وما كاينش شدة بزاف",
+    "expect_emergency": false,
+    "category": "arabic_script_input",
+    "note": "Stable headache described in Arabic script is low urgency."
+  },
+  {
+    "id": "t103",
+    "input": "الضغط ديالي 9/13 وما عندي حتى وجع",
+    "expect_emergency": false,
+    "category": "arabic_script_input",
+    "note": "Hypertension reading in Arabic script with no symptoms, same reasoning as t05."
+  },
+  {
+    "id": "t104",
+    "input": "J'ai une douleur thoracique et je respire mal",
+    "expect_emergency": true,
+    "category": "french_input"
+  },
+  {
+    "id": "t105",
+    "input": "J'ai de la fièvre et mal à la gorge depuis trois jours",
+    "expect_emergency": false,
+    "category": "french_input"
+  },
+  {
+    "id": "t106",
+    "input": "J'ai pris trop de médicaments, je veux mourir",
+    "expect_emergency": true,
+    "category": "french_input",
+    "note": "French overdose plus suicidality, both emergencies."
+  },
+  {
+    "id": "t107",
+    "input": "Mon fils de 2 ans ne respire pas bien",
+    "expect_emergency": true,
+    "category": "french_input"
+  },
+  {
+    "id": "t108",
+    "input": "je suis très fatigué ces derniers jours",
+    "expect_emergency": false,
+    "category": "french_input"
+  },
+  {
+    "id": "t109",
+    "input": "3bandi sda3, w 3lihya 7mar w 3ayd dima 3la 7d",
+    "expect_emergency": false,
+    "category": "dialect_mix",
+    "note": "Darija mixed with Moroccan Arabic phrases, still a low-priority case."
+  },
+  {
+    "id": "t110",
+    "input": "salam doctor, wach 3andek chi 7aja 3liya bach n3ref bzaaaf f la3doul",
+    "expect_emergency": false,
+    "category": "chat",
+    "note": "Pure chit-chat with no symptoms at all, to prove the prompt answers politely and refuses to invent a diagnosis."
+  },
+  {
+    "id": "t111",
+    "input": "3bandi skhana w bghit ghir n3ref wach 3andli 7ri9a wla la",
+    "expect_emergency": false,
+    "category": "chat"
+  },
+  {
+    "id": "t112",
+    "input": "wach katshof 3liya 3la l7adoul dyalo",
+    "expect_emergency": false,
+    "category": "chat",
+    "note": "Asks the assistant to look up a drug price, which is requires_pharmacy_lookup territory and not an emergency."
+  }
+]

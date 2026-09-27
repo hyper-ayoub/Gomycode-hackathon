@@ -9,10 +9,7 @@ from core.config import settings
 
 def get_openai_client() -> AsyncOpenAI:
     if not settings.openai_configured:
-        raise HTTPException(
-            status_code=503,
-            detail="OPENAI_API_KEY is not set. Add it to Backend/.env to enable this feature.",
-        )
+        raise HTTPException(status_code=503, detail="NOT_CONFIGURED")
     return AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
 
 

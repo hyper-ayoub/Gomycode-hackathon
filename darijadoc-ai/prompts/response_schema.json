@@ -1,0 +1,116 @@
+{
+  "type": "object",
+  "required": [
+    "input_language",
+    "mode",
+    "explanation_darija",
+    "explanation_darija_arabic",
+    "explanation_french",
+    "next_steps",
+    "next_steps_arabic",
+    "urgency_level",
+    "emergency",
+    "emergency_reason",
+    "location_required",
+    "requires_pharmacy_lookup",
+    "disclaimer",
+    "disclaimer_arabic",
+    "tts_priority"
+  ],
+  "properties": {
+    "input_language": {
+      "type": "string",
+      "enum": ["darija", "french", "arabic", "mixed"]
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["explain", "chat"]
+    },
+    "explanation_darija": { "type": "string", "minLength": 10 },
+    "explanation_darija_arabic": { "type": "string", "minLength": 10 },
+    "explanation_french": { "type": "string", "minLength": 10 },
+    "next_steps": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 2,
+      "maxItems": 5
+    },
+    "next_steps_arabic": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 2,
+      "maxItems": 5
+    },
+    "urgency_level": {
+      "type": "string",
+      "enum": ["low", "medium", "high"]
+    },
+    "emergency": { "type": "boolean" },
+    "emergency_reason": {
+      "type": ["string", "null"]
+    },
+    "location_required": { "type": "boolean" },
+    "requires_pharmacy_lookup": { "type": "boolean" },
+    "disclaimer": { "type": "string" },
+    "disclaimer_arabic": { "type": "string" },
+    "tts_priority": {
+      "type": "string",
+      "enum": ["darija", "french"],
+      "description": "Which language the app should speak first. Follows the patient's input language, including in emergencies."
+    },
+    "prescription": {
+      "type": ["object", "null"],
+      "description": "Required non-null when mode is 'explain'. Null in 'chat' mode.",
+      "properties": {
+        "unreadable": { "type": "boolean" },
+        "extraction_confidence": {
+          "type": "string",
+          "enum": ["high", "medium", "low"]
+        },
+        "doctor_name": { "type": ["string", "null"] },
+        "date": { "type": ["string", "null"] },
+        "medications": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name", "name_arabic", "dosage", "form",
+              "frequency", "timing", "duration",
+              "purpose_darija", "purpose_darija_arabic",
+              "purpose_french", "with_food", "warnings", "confidence"
+            ],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "name_arabic": { "type": "string", "minLength": 1 },
+              "dosage": { "type": "string" },
+              "form": {
+                "type": "string",
+                "enum": ["comprimé", "sirop", "goutte", "injection", "crème", "pommade", "gel", "sachet", "suppositoire", "inhalateur", "autre"]
+              },
+              "frequency": { "type": "string", "description": "Latin Darija" },
+              "timing": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Latin Darija, one entry per moment of the day"
+              },
+              "duration": { "type": "string", "description": "Latin Darija" },
+              "purpose_darija": { "type": "string" },
+              "purpose_darija_arabic": { "type": "string" },
+              "purpose_french": { "type": "string" },
+              "with_food": {
+                "type": "string",
+                "enum": ["before", "after", "with", "empty_stomach", "unknown"]
+              },
+              "warnings": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Only what is written on the document. Empty array if none."
+              },
+              "confidence": { "type": "string", "enum": ["high", "medium", "low"] }
+            }
+          }
+        }
+      }
+    }
+  }
+}
