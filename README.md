@@ -5,9 +5,6 @@ Arabic/Darija Voice Medical Navigator for the GOMYCODE hackathon.
 
 
 
-https://github.com/user-attachments/assets/3c8279c6-9c83-4b4c-a216-9dfbe30ffa0b
-
-
 https://github.com/user-attachments/assets/383fe8b6-223a-4553-8e86-0c5628adba49
 
 
